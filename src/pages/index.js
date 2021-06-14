@@ -27,8 +27,10 @@ const BlogIndex = ({ data }, location) => {
             loop={true}
             muted
             style={{ zIndex: -1, position: "absolute" }}
-            poster={data.strapiHomepage.videoThumbnail.localFile.publicURL}
-            preload="metadata"
+            poster={
+              data.strapiHomepage.videoThumbnail.localFile.childImageSharp.fluid
+                .src
+            }
           >
             <source
               src={data.strapiHomepage.video.localFile.publicURL}
@@ -89,6 +91,11 @@ const indexQuery = graphql`
       videoThumbnail {
         localFile {
           publicURL
+          childImageSharp {
+            fluid(maxWidth: 1360) {
+              ...GatsbyImageSharpFluid
+            }
+          }
         }
       }
     }
