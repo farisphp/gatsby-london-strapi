@@ -8,6 +8,7 @@ import PostCard from "../components/postCard"
 // import "../utils/global.scss"
 import "../utils/normalize.css"
 import "../utils/css/screen.css"
+import "../assets/css/homepage.css"
 //TODO: switch to staticQuery, get rid of comments, remove unnecessary components, export as draft template
 const BlogIndex = ({ data }, location) => {
   const siteTitle = data.strapiHomepage.hero.title
@@ -16,18 +17,37 @@ const BlogIndex = ({ data }, location) => {
 
   return (
     <Layout title={siteTitle}>
-      <SEO
-        title={data.strapiHomepage.seo.metaTitle}
-        keywords={[`blog`, `gatsby`, `javascript`, `react`]}
-      />
+      <SEO title="Home" keywords={[`blog`, `gatsby`, `javascript`, `react`]} />
       {/* <Bio /> */}
-      {data.strapiHomepage.seo.metaDescription && (
-        <header className="page-head">
-          <h2 className="page-head-title">
-            {data.strapiHomepage.seo.metaDescription}
-          </h2>
-        </header>
-      )}
+      <section className="video-container">
+        <div className="video-player">
+          <video
+            playsInline={true}
+            autoPlay={true}
+            loop={true}
+            muted
+            style={{ zIndex: -1, position: "absolute" }}
+            poster={data.strapiHomepage.videoThumbnail.localFile.publicURL}
+            preload="metadata"
+          >
+            <source
+              src={data.strapiHomepage.video.localFile.publicURL}
+              type="video/mp4"
+            />
+          </video>
+        </div>
+        {data.strapiHomepage.seo.metaDescription && (
+          <header className="page-head">
+            <h2
+              className="page-head-title"
+              style={{ color: data.strapiHomepage.hero.descriptionColor }}
+            >
+              {data.strapiHomepage.seo.metaDescription}
+            </h2>
+          </header>
+        )}
+      </section>
+
       <div className="post-feed">
         {posts.map(({ node }) => {
           postCounter++
@@ -50,6 +70,7 @@ const indexQuery = graphql`
     strapiHomepage {
       hero {
         title
+        descriptionColor
       }
       seo {
         metaTitle
@@ -58,6 +79,16 @@ const indexQuery = graphql`
           localFile {
             publicURL
           }
+        }
+      }
+      video {
+        localFile {
+          publicURL
+        }
+      }
+      videoThumbnail {
+        localFile {
+          publicURL
         }
       }
     }

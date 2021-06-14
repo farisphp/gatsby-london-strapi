@@ -11,9 +11,15 @@ import Helmet from "react-helmet"
 import { useStaticQuery, graphql } from "gatsby"
 
 function SEO({ description, lang, meta, keywords, title }) {
-  const { site } = useStaticQuery(
+  const { site, strapiHomepage } = useStaticQuery(
     graphql`
       query {
+        strapiHomepage {
+          seo {
+            metaTitle
+            metaDescription
+          }
+        }
         site {
           siteMetadata {
             title
@@ -25,7 +31,7 @@ function SEO({ description, lang, meta, keywords, title }) {
     `
   )
 
-  const metaDescription = description || site.siteMetadata.description
+  const metaDescription = description || strapiHomepage.seo.metaDescription
 
   return (
     <Helmet
@@ -33,7 +39,7 @@ function SEO({ description, lang, meta, keywords, title }) {
         lang,
       }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
+      titleTemplate={`%s | ${strapiHomepage.seo.metaTitle}`}
       meta={[
         {
           name: `description`,

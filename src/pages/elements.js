@@ -9,7 +9,7 @@ import "../utils/normalize.css"
 import "../utils/css/screen.css"
 
 const ElementsPage = ({ data }, location) => {
-  const siteTitle = data.site.siteMetadata.title
+  const siteTitle = data.strapiHomepage.hero.title
 
   return (
     <Layout title={siteTitle}>
@@ -528,8 +528,8 @@ const ElementsPage = ({ data }, location) => {
 
 const indexQuery = graphql`
   query {
-    site {
-      siteMetadata {
+    strapiHomepage {
+      hero {
         title
       }
     }
@@ -561,10 +561,10 @@ const indexQuery = graphql`
   }
 `
 
-export default props => (
+export default (props) => (
   <StaticQuery
     query={indexQuery}
-    render={data => (
+    render={(data) => (
       <ElementsPage location={props.location} data={data} {...props} />
     )}
   />

@@ -1,0 +1,9 @@
+.video-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.video-player {
+  position: absolute;
+}
