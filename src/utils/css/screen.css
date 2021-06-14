@@ -136,11 +136,11 @@ body {
   z-index: 300;
   margin-top: -10px;
   font-size: 1.35rem;
-  padding: 3vw 3vw 1vw 3vw;
+  padding: 2vw 3vw 1vw 3vw;
 }
 @media (max-width: 850px) {
   .site-head {
-    padding: 6vw 6vw 2vw 6vw;
+    padding: 4vw 6vw 2vw 6vw;
   }
 }
 

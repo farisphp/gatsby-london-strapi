@@ -14,6 +14,13 @@ const BlogIndex = ({ data }, location) => {
   const siteTitle = data.strapiHomepage.hero.title
   const posts = data.allStrapiArticle.edges
   let postCounter = 0
+  const videoFromExternalSrc = data.strapiHomepage.videoFromExternalSrc
+  const videoThumbnail = videoFromExternalSrc
+    ? data.strapiHomepage.videoThumbnailUrl
+    : data.strapiHomepage.videoThumbnail.localFile.childImageSharp.fluid.src
+  const video = videoFromExternalSrc
+    ? data.strapiHomepage.videoUrl
+    : data.strapiHomepage.video.localFile.publicURL
 
   return (
     <Layout title={siteTitle}>
@@ -26,16 +33,10 @@ const BlogIndex = ({ data }, location) => {
             autoPlay={true}
             loop={true}
             muted
-            style={{ zIndex: -1, position: "absolute" }}
-            poster={
-              data.strapiHomepage.videoThumbnail.localFile.childImageSharp.fluid
-                .src
-            }
+            style={{ zIndex: -1, position: "relative", maxWidth: "100%" }}
+            poster={videoThumbnail}
           >
-            <source
-              src={data.strapiHomepage.video.localFile.publicURL}
-              type="video/mp4"
-            />
+            <source src={video} type="video/mp4" />
           </video>
         </div>
         {data.strapiHomepage.seo.metaDescription && (
@@ -70,6 +71,9 @@ const BlogIndex = ({ data }, location) => {
 const indexQuery = graphql`
   query {
     strapiHomepage {
+      videoFromExternalSrc
+      videoThumbnailUrl
+      videoUrl
       hero {
         title
         descriptionColor
