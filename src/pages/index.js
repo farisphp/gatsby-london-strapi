@@ -10,21 +10,21 @@ import "../utils/normalize.css"
 import "../utils/css/screen.css"
 //TODO: switch to staticQuery, get rid of comments, remove unnecessary components, export as draft template
 const BlogIndex = ({ data }, location) => {
-  const siteTitle = data.site.siteMetadata.title
-  const posts = data.allMarkdownRemark.edges
+  const siteTitle = data.strapiHomepage.hero.title
+  const posts = data.allStrapiArticle.edges
   let postCounter = 0
 
   return (
     <Layout title={siteTitle}>
       <SEO
-        title="All posts"
+        title={data.strapiHomepage.seo.metaTitle}
         keywords={[`blog`, `gatsby`, `javascript`, `react`]}
       />
       {/* <Bio /> */}
-      {data.site.siteMetadata.description && (
+      {data.strapiHomepage.seo.metaDescription && (
         <header className="page-head">
           <h2 className="page-head-title">
-            {data.site.siteMetadata.description}
+            {data.strapiHomepage.seo.metaDescription}
           </h2>
         </header>
       )}
@@ -33,7 +33,7 @@ const BlogIndex = ({ data }, location) => {
           postCounter++
           return (
             <PostCard
-              key={node.fields.slug}
+              key={node.slug}
               count={postCounter}
               node={node}
               postClass={`post`}
@@ -47,10 +47,49 @@ const BlogIndex = ({ data }, location) => {
 
 const indexQuery = graphql`
   query {
-    site {
-      siteMetadata {
+    strapiHomepage {
+      hero {
         title
-        description
+      }
+      seo {
+        metaTitle
+        metaDescription
+        shareImage {
+          localFile {
+            publicURL
+          }
+        }
+      }
+    }
+    allStrapiArticle {
+      edges {
+        node {
+          strapiId
+          slug
+          title
+          category {
+            name
+          }
+          image {
+            localFile {
+              childImageSharp {
+                fluid(maxWidth: 1360) {
+                  ...GatsbyImageSharpFluid
+                }
+              }
+            }
+          }
+          author {
+            name
+            picture {
+              localFile {
+                childImageSharp {
+                  gatsbyImageData(width: 30, height: 30)
+                }
+              }
+            }
+          }
+        }
       }
     }
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
@@ -78,10 +117,10 @@ const indexQuery = graphql`
   }
 `
 
-export default props => (
+export default (props) => (
   <StaticQuery
     query={indexQuery}
-    render={data => (
+    render={(data) => (
       <BlogIndex location={props.location} props data={data} {...props} />
     )}
   />

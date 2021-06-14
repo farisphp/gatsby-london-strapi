@@ -1,6 +1,10 @@
 const urljoin = require("url-join")
 const siteConfig = require("./siteConfig")
 
+require("dotenv").config({
+  path: `.env`,
+})
+
 module.exports = {
   siteMetadata: {
     title: siteConfig.name,
@@ -12,6 +16,15 @@ module.exports = {
     },
   },
   plugins: [
+    {
+      resolve: "gatsby-source-strapi",
+      options: {
+        apiURL: process.env.API_URL || "http://localhost:1337",
+        collectionTypes: ["article", "category", "writer"],
+        singleTypes: [`homepage`, `global`],
+        queryLimit: 1000,
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -74,12 +87,6 @@ module.exports = {
         // whitelist: ['whitelist'], // Don't remove this selector
         // ignore: ['/ignored.css', 'prismjs/', 'docsearch.js/'], // Ignore files/folders
         // purgeOnly : ['components/', '/main.css', 'bootstrap/'], // Purge only these files/folders
-      },
-    },
-    {
-      resolve: `gatsby-plugin-google-analytics`,
-      options: {
-        //trackingId: `ADD YOUR TRACKING ID HERE`,
       },
     },
     `gatsby-plugin-feed`,
